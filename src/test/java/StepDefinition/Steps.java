@@ -20,7 +20,7 @@ public class Steps {
     private By messageStatus = By.id("entorno-estatus-contenido");
 
     @Given("Abre el web browser Chrome y direcciona a la aplicacion$")
-    public void open_the_web_browser() throws Throwable {
+    public void openBrowser() throws Throwable {
         System.setProperty("webdriver.chrome.driver", "/home/ue0100066b/Documentos/Chris/TestingCourse/Extraido/Chrome-Driver/chromedriver");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -28,7 +28,7 @@ public class Steps {
     }
 
     @When("Ingreso el usuario y clave$")
-    public void typeUser() throws Throwable {
+    public void typeUserPassword() throws Throwable {
         driver.findElement(txtUser).sendKeys("UE0100066B");
         driver.findElement(txtPassword).sendKeys("chris012345");
         Thread.sleep(3000);
@@ -50,7 +50,7 @@ public class Steps {
     }
 
     @And("Cierro el Browser$")
-    public void Quit() throws Throwable {
+    public void closeBrowser() throws Throwable {
         System.out.println("Cerrando el browser...");
         /*driver.close();*/
     }
