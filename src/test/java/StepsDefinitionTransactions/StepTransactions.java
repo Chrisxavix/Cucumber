@@ -4,18 +4,21 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
 public class StepTransactions {
 
     private WebDriver driver;
+    /* Login */
     private By txtUser = By.xpath("//*[@id='ingreso']/input[1]");
     private By txtPassword = By.xpath("//*[@id='ingreso']/input[2]");
     private By btnSubmit = By.xpath("//*[@id='ingreso']/p[2]/input");
+    /* Login - more options */
+    private By linkMoreOptions = By.id("mas_opciones");
+    private By btnForceClose = By.id("cierre");
+    /* Formulario */
     private By messageOk = By.id("entorno-estatus-contenido");
     private By txtCode = By.id("entorno-pt");
     private By messageStatus = By.id("entorno-estatus-contenido");
@@ -28,6 +31,12 @@ public class StepTransactions {
         driver.get("http://10.1.115.64:8380/WEB3/ingreso.html");
     }
 
+    @When("Selecciono cierre de sesiones activas$")
+    public void selectMoreOptions()throws Throwable {
+        Thread.sleep(3000);
+        driver.findElement(linkMoreOptions).click();
+    }
+
     @When("Ingreso el usuario \"([^\"]*)\" y la contrasena \"([^\"]*)\"$")
     public void typeUserPassword(String user, String password)throws Throwable {
         driver.findElement(txtUser).sendKeys(user);
@@ -38,12 +47,20 @@ public class StepTransactions {
 
     @When("Ingreso la transaccion \"([^\"]*)\"$")
     public void typeTransaction(String transaction) throws Throwable {
+        Thread.sleep(2000);
         driver.findElement(txtCode).sendKeys(transaction);
         Actions actions = new Actions(driver);
         Thread.sleep(1000);
         actions.moveToElement(driver.findElement(txtCode));
         actions.sendKeys(Keys.ENTER);
         actions.build().perform();
+    }
+
+    @Then("Marco forzar cierre$")
+    public void selectForceClose()throws Throwable {
+        Thread.sleep(2000);
+        WebElement selectOptions = driver.findElement(btnForceClose);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", selectOptions);
     }
 
     @Then("Visualizo el menu principal$")
