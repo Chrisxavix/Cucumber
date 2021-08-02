@@ -7,6 +7,7 @@ import cucumber.api.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import java.util.Set;
 
 public class StepTransactions {
 
@@ -51,6 +52,9 @@ public class StepTransactions {
     private By btnGenRep_Generar = By.xpath("//*[@id='container_7']/table/tbody/tr/td/button");
     /* Opciones de tareas */
     private By btnSave = By.xpath("//*[@id='entorno-teclas']/button[9]");
+    /* Generar reporte */
+    private By viewStratrace = By.xpath("/html/body/a");
+    private By closeWindowReport = By.xpath("/html/body/button[1]");
 
     @Given("Abre el web browser Chrome y direcciona a la aplicacion$")
     public void openBrowser() throws Throwable {
@@ -278,6 +282,31 @@ public class StepTransactions {
         /* Generar reporte */
         WebElement generate = driver.findElement(btnGenRep_Generar);
         generate.click();
+        Set <String> windows = driver.getWindowHandles();
+        String mainWindow = driver.getWindowHandle();
+        for (String handle: windows) {
+            driver.switchTo().window(handle);
+            String pagetitle = driver.getTitle();
+            int cont = 1;
+            while (pagetitle.equals("") && cont < 40)  {
+                Thread.sleep(1000);
+                cont++;
+                pagetitle = driver.getTitle();
+            }
+            if (pagetitle.equals("")) {
+                pagetitle = "Error";
+            }
+            System.out.println("Página: " + pagetitle);
+            if(pagetitle.equalsIgnoreCase("Error")) {
+                Thread.sleep(1000);
+                driver.findElement(viewStratrace).click();
+                Thread.sleep(2000);
+                WebElement closeWindow = driver.findElement(closeWindowReport);
+                Thread.sleep(2000);
+                closeWindow.click();
+            }
+        }
+        driver.switchTo().window(mainWindow);
         actions.build().perform();
         Thread.sleep(2000);
     }
