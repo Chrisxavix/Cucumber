@@ -3,21 +3,15 @@ Feature: Transacciones de FitBank
   Background:
     Given Abre el web browser Chrome y direcciona a la aplicacion
   Scenario Outline: Flujo de transacciones
-    When Selecciono cierre de sesiones activas
-    Then Marco forzar cierre
-    When Ingreso el usuario "<user>" y la contrasena "<password>"
+    When Cierro de sesiones activas e engreso el usuario "<user>" y la contrasena "<password>"
     Then Visualizo el menu principal
     When Ingreso la transaccion "<transaction>"
     Then Visualizo el estado de la transaccion
-    When Lleno los datos generales de titulares y cotitulares
-    And Lleno los datos de datos de la cuenta
-    And Lleno los datos de datos del certificado
-    And Copio los datos ingresados en titulares en firmas autorizadas
-    And Genero el reporte
-    Then Guardo el formulario
+    When Lleno los datos generales
+    Then Genero el reporte
+    And Guardo el formulario
     And Confirmo la creacion del numero de solicitud
-    Then Selecciono la opcion de detalle de la solicitud de fondos
-    And LLeno el formulario de detalle de la solicitud de fondos
+    When LLeno el formulario de detalle de la solicitud de fondos
     Then Guardo el formulario
     And Cierro el Browser
     Examples: Login[ usuarios, contrasenas, transacciones]
