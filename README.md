@@ -1,4 +1,4 @@
-# Cucumber
-Casos de Prueba usando Cucumber en el sitio web Fitbank.
+# Cucumber y Selenium
+Escenarios de prueba usando Cucumber y Selenium en el sitio web Fitbank.
 
-Proyecto ejecutado con Maven.
+Proyecto ejecutado en Java con Maven.
