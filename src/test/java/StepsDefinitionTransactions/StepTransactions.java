@@ -81,22 +81,16 @@ public class StepTransactions {
         driver.get("http://10.1.115.64:8380/WEB3/ingreso.html");
     }
 
-    @When("Selecciono cierre de sesiones activas$")
-    public void selectMoreOptions()throws Throwable {
+    @When("Cierro de sesiones activas e engreso el usuario \"([^\"]*)\" y la contrasena \"([^\"]*)\"$")
+    public void closeSessionAndTypeUserPassword(String user, String password)throws Throwable {
+        /* Forzar cierre de sesiones */
         Thread.sleep(2000);
         driver.findElement(linkMoreOptions).click();
         Thread.sleep(2000);
-    }
-
-    @Then("Marco forzar cierre$")
-    public void selectForceClose()throws Throwable {
         WebElement selectOptions = driver.findElement(btnForceClose);
         ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", selectOptions);
         Thread.sleep(2000);
-    }
-
-    @When("Ingreso el usuario \"([^\"]*)\" y la contrasena \"([^\"]*)\"$")
-    public void typeUserPassword(String user, String password)throws Throwable {
+        /* Ingreso de usuario y contraseña */
         driver.findElement(txtUser).sendKeys(user);
         Thread.sleep(2000);
         driver.findElement(txtPassword).sendKeys(password);
@@ -149,11 +143,12 @@ public class StepTransactions {
         }
     }
 
-    @When("Lleno los datos generales de titulares y cotitulares$")
-    public void typeTitularCotitular() throws Throwable {
-        Actions actions = new Actions(driver);
-        /* TD1 */
+    @When("Lleno los datos generales$")
+    public void typeGeneralData() throws Throwable {
+        /* ---- DATOS GENERALES ---- */
+        /* Titular y Cotitulares */
         /* Titutar */
+        /* TD1 */
         /* Identificación */
         driver.findElement(selctTitCotiTd1_Identificacion).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
@@ -168,8 +163,8 @@ public class StepTransactions {
         Thread.sleep(1000);
         driver.findElement(selctTitCotiTd1_Direccion).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
-        /* TD2 */
         /* Cotitutar */
+        /* TD2 */
         /* Y/O */
         driver.findElement(selctTitCotiTd2_YO).sendKeys("Y");
         Thread.sleep(2000);
@@ -194,12 +189,7 @@ public class StepTransactions {
         Thread.sleep(1000);
         driver.findElement(selctTitCotiTd2_Direccion).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
-    }
-
-    @And("Lleno los datos de datos de la cuenta$")
-    public void typeDataAccount() throws Throwable {
-        Actions actions = new Actions(driver);
-        /* Datos de la cuenta */
+        /* ---- DATOS DE LA CUENTA ---- */
         /* Ejecutivo */
         String executiveGetValue = driver.findElement(txtAccData_Executive).getAttribute("value");
         for (int i = 0; i < executiveGetValue.length(); i++) {
@@ -218,11 +208,7 @@ public class StepTransactions {
         Thread.sleep(1000);
         driver.findElement(selctAccData_Origin).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
-    }
-
-    @And("Lleno los datos de datos del certificado$")
-    public void typeDataCertificate() throws Throwable {
-        /* Datos del certificado */
+        /* ---- DATOS DEL CERTIFICADO ---- */
         /* Valor */
         driver.findElement(selctCertData_Value).sendKeys("1,000.00");
         Thread.sleep(2000);
@@ -237,7 +223,7 @@ public class StepTransactions {
         Thread.sleep(2000);
         /* Días Plazo */
         driver.findElement(selctCertData_DaysTerm).sendKeys("180");
-        Thread.sleep(2000);
+        Thread.sleep(2500);
         driver.findElement(selctCertData_DaysTerm).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         /* Capitalización de interés */
@@ -250,11 +236,7 @@ public class StepTransactions {
         /* Cerrar diálogo */
         driver.findElement(btnCertData_DialogClose).click();
         Thread.sleep(2000);
-    }
-
-    @And("Copio los datos ingresados en titulares en firmas autorizadas$")
-    public void copyFirms() throws Throwable {
-        /* Datos del certificado */
+        /* ---- DATOS DEL CERTIFICADO ---- */
         /* Firma1 */
         driver.findElement(btnFirms_FirmTd1).click();
         Thread.sleep(2000);
@@ -279,7 +261,7 @@ public class StepTransactions {
             String pagetitle = driver.getTitle();
             int cont = 1;
             /* Control de la página de Error */
-            while (pagetitle.equals("") && cont < 60)  {
+            while (pagetitle.equals("") && cont < 120)  {
                 Thread.sleep(1000);
                 cont++;
                 pagetitle = driver.getTitle();
@@ -313,7 +295,7 @@ public class StepTransactions {
         String resultText = driver.findElement(messageStatus).getText();
         int cont = 1;
         /* Control de carga al procesar la transacción con Datos Generales */
-        while (resultText.equals("PROCESANDO...") && cont <= 60) {
+        while (resultText.equals("PROCESANDO...") && cont <= 120) {
             Thread.sleep(1000);
             cont++;
             resultText = driver.findElement(messageStatus).getText();
@@ -328,14 +310,10 @@ public class StepTransactions {
         Thread.sleep(2000);
     }
 
-    @Then("Selecciono la opcion de detalle de la solicitud de fondos$")
-    public void selectDetailRequest() throws Throwable {
+    @When("LLeno el formulario de detalle de la solicitud de fondos$")
+    public void typeFormDetailRequest() throws Throwable {
         driver.findElement(btnDetReq_Main).click();
         Thread.sleep(2000);
-    }
-
-    @And("LLeno el formulario de detalle de la solicitud de fondos$")
-    public void typeFormDetailRequest() throws Throwable {
         /* ChecBox de Origen de los Fondos*/
         WebElement selectSalary = driver.findElement(chkDetReq_Salary);
         ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", selectSalary);
