@@ -13,10 +13,14 @@ Feature: Transacciones de FitBank
     And Confirmo la creacion del numero de solicitud
     When LLeno el formulario de detalle de la solicitud de fondos
     Then Guardo el formulario
+    And Valido el formulario de detalle de la solicitud de fondos
+    When LLeno el formulario de detalle de ingreso de fondos
+    Then Guardo el formulario
+    And Valido el formulario de detalle de ingreso de fondos
     And Cierro el Browser
-    Examples: Login[ usuarios, contrasenas, transacciones]
-      | user       | password    | transaction |
-      | UE0100066B | chris012345 | 05-2000     |
+    Examples: Login[usuarios, contrasenas, transacciones]
+      | user       | password    | transaction | InterestCapitalization |
+      | UE0100066B | chris012345 | 05-2000     | true                   |
       #| UE0100066B | chris012345 | 04-6003     |
       #| UE0100066B | chris012345 | 04-1111     |
 
