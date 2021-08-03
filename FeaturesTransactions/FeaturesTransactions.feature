@@ -15,7 +15,10 @@ Feature: Transacciones de FitBank
     And Copio los datos ingresados en titulares en firmas autorizadas
     And Genero el reporte
     Then Guardo el formulario
-    And Y confirmo la creacion del numero de solicitud
+    And Confirmo la creacion del numero de solicitud
+    Then Selecciono la opcion de detalle de la solicitud de fondos
+    And LLeno el formulario de detalle de la solicitud de fondos
+    Then Guardo el formulario
     And Cierro el Browser
     Examples: Login[ usuarios, contrasenas, transacciones]
       | user       | password    | transaction |

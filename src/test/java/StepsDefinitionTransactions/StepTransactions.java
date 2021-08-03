@@ -24,8 +24,8 @@ public class StepTransactions {
     private By txtCode = By.id("entorno-pt");
     private By messageStatus = By.id("entorno-estatus-contenido");
     /* Transacción 05-2000 */
+    /* DATOS GENERALES */
     /* Número de Solicitud */
-    /*private By txtNumberRequest = By.xpath("//*[@id='container_1']/table/tbody/tr/td/input[1]");*/
     private By txtNumberRequest = By.id("c_F1csolicitud_0");
     /* Titulares - Cotitulares */
     private By selctTitCotiTd1_Identificacion = By.xpath("//*[@id='c_F2Id_0']");
@@ -37,6 +37,7 @@ public class StepTransactions {
     /* Datos de la Cuenta */
     private By selctAccData_Executive = By.xpath("//*[@id='c_F3Cusrcta_0']");
     private By selctAccData_Origin = By.xpath("//*[@id='c_F3CpropositoCDPC_0']");
+    private By txtAccData_Executive = By.xpath("//*[@id='c_F3Cusrcta_0']");
     /* Datos del Certificado */
     private By selctCertData_Value = By.xpath("//*[@id='c_f7valor_0']");
     private By selctCertData_Frecuency = By.xpath("//*[@id='c_f7frecuencia_0']");
@@ -50,6 +51,22 @@ public class StepTransactions {
     private By txtFirms_Firm = By.xpath("//*[@id='c_F4Identificacion_2']");
     /* Generar Reporte */
     private By btnGenRep_Generar = By.xpath("//*[@id='container_7']/table/tbody/tr/td/button");
+    /* DETALLE SOLICITUD DE FONDOS */
+    private By btnDetReq_Main = By.xpath("//*[@id='container_0']/table/tbody/tr/td/ul[1]/li[2]/a");
+    private By chkDetReq_Salary = By.xpath("//*[@id='c_F2salario_0']");
+    private By chkDetReq_Transfers = By.xpath("//*[@id='c_F2transferencias_0']");
+    private By chkDetReq_Herency = By.xpath("//*[@id='c_F2herencia_0']");
+    private By arrowModalDetReq_InitialDeposit = By.xpath("//*[@id='container_5']/table/tbody/tr[2]/td/img");
+    private By txtAreaDetReq_InitialDeposit = By.xpath("/html/body/div[13]/div[2]/textarea");
+    private By btnCloseDetReq_InitialDeposit = By.xpath("/html/body/div[13]/div[1]/img");
+    private By selctDetReq_PurposeAccount = By.xpath("//*[@id='c_F4proposito_0']");
+    private By arrowModalDetReq_Occupation = By.xpath("//*[@id='container_7']/table/tbody/tr[2]/td/img");
+    private By txtAreaDetReq_Occupation = By.xpath("/html/body/div[13]/div[2]/textarea");
+    private By btnCloseDetReq_Occupation = By.xpath("/html/body/div[13]/div[1]/img");
+    private By arrowModalDetReq_Comment = By.xpath("//*[@id='container_8']/table/tbody/tr[2]/td/img");
+    private By txtAreaDetReq_Comment = By.xpath("/html/body/div[13]/div[2]/textarea");
+    private By btnCloseDetReq_Comment = By.xpath("/html/body/div[13]/div[1]/img");
+    private By chkDetReq_YesOwner = By.xpath("//*[@id='container_9']/table/tbody/tr[2]/td[1]/span[2]/input[2]");
     /* Opciones de tareas */
     private By btnSave = By.xpath("//*[@id='entorno-teclas']/button[9]");
     /* Generar reporte */
@@ -100,12 +117,9 @@ public class StepTransactions {
 
     @When("Ingreso la transaccion \"([^\"]*)\"$")
     public void typeTransaction(String transaction) throws Throwable {
-        Actions actions = new Actions(driver);
         driver.findElement(txtCode).sendKeys(transaction);
         Thread.sleep(2000);
-        actions.moveToElement(driver.findElement(txtCode));
-        actions.sendKeys(Keys.ENTER);
-        actions.build().perform();
+        driver.findElement(txtCode).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
     }
 
@@ -141,52 +155,44 @@ public class StepTransactions {
         /* TD1 */
         /* Titutar */
         /* Identificación */
-        WebElement identificacionTd1 = driver.findElement(selctTitCotiTd1_Identificacion);
-        identificacionTd1.sendKeys(Keys.ARROW_DOWN);
+        driver.findElement(selctTitCotiTd1_Identificacion).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
-        identificacionTd1.sendKeys("1704556644");
+        driver.findElement(selctTitCotiTd1_Identificacion).sendKeys("1704556644");
         Thread.sleep(1000);
-        identificacionTd1.sendKeys(Keys.ENTER);
+        driver.findElement(selctTitCotiTd1_Identificacion).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         /* Dirección */
-        WebElement direcTd1 = driver.findElement(selctTitCotiTd1_Direccion);
-        direcTd1.sendKeys(Keys.ARROW_DOWN);
+        driver.findElement(selctTitCotiTd1_Direccion).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
-        direcTd1.sendKeys("1");
+        driver.findElement(selctTitCotiTd1_Direccion).sendKeys("1");
         Thread.sleep(1000);
-        direcTd1.sendKeys(Keys.ENTER);
+        driver.findElement(selctTitCotiTd1_Direccion).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
-
         /* TD2 */
         /* Cotitutar */
         /* Y/O */
-        WebElement yoTd2 = driver.findElement(selctTitCotiTd2_YO);
-        yoTd2.sendKeys("Y");
+        driver.findElement(selctTitCotiTd2_YO).sendKeys("Y");
         Thread.sleep(2000);
         /* Identificación */
-        WebElement identificacionTd2 = driver.findElement(selctTitCotiTd2_Identificacion);
-        identificacionTd2.sendKeys(Keys.ARROW_DOWN);
+        driver.findElement(selctTitCotiTd2_Identificacion).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
-        identificacionTd2.sendKeys("1100039401");
+        driver.findElement(selctTitCotiTd2_Identificacion).sendKeys("1100039401");
         Thread.sleep(1000);
-        identificacionTd2.sendKeys(Keys.ENTER);
+        driver.findElement(selctTitCotiTd2_Identificacion).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         /* Relación */
-        WebElement relacionTd2 = driver.findElement(selctTitCotiTd2_Relacion);
-        relacionTd2.sendKeys(Keys.ARROW_DOWN);
+        driver.findElement(selctTitCotiTd2_Relacion).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
-        relacionTd2.sendKeys("CTI");
+        driver.findElement(selctTitCotiTd2_Relacion).sendKeys("CTI");
         Thread.sleep(1000);
-        relacionTd2.sendKeys(Keys.ENTER);
+        driver.findElement(selctTitCotiTd2_Relacion).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         /* Dirección */
-        WebElement direcTd2 = driver.findElement(selctTitCotiTd2_Direccion);
-        direcTd2.sendKeys(Keys.ARROW_DOWN);
+        driver.findElement(selctTitCotiTd2_Direccion).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
-        direcTd2.sendKeys("4");
+        driver.findElement(selctTitCotiTd2_Direccion).sendKeys("4");
         Thread.sleep(1000);
-        direcTd2.sendKeys(Keys.ENTER);
-        actions.build().perform();
+        driver.findElement(selctTitCotiTd2_Direccion).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
     }
 
@@ -195,106 +201,88 @@ public class StepTransactions {
         Actions actions = new Actions(driver);
         /* Datos de la cuenta */
         /* Ejecutivo */
-        WebElement executive = driver.findElement(selctAccData_Executive);
-        for(int i= 0; i<10; i++ ) {
-            executive.sendKeys(Keys.BACK_SPACE);
+        String executiveGetValue = driver.findElement(txtAccData_Executive).getAttribute("value");
+        for (int i = 0; i < executiveGetValue.length(); i++) {
+            driver.findElement(selctAccData_Executive).sendKeys(Keys.BACK_SPACE);
         }
-        executive.sendKeys(Keys.ARROW_DOWN);
+        driver.findElement(selctAccData_Executive).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
-        executive.sendKeys("BA01000815");
+        driver.findElement(selctAccData_Executive).sendKeys("BA01000815");
         Thread.sleep(1000);
-        executive.sendKeys(Keys.ENTER);
+        driver.findElement(selctAccData_Executive).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         /* Origen */
-        WebElement origin = driver.findElement(selctAccData_Origin);
-        origin.sendKeys(Keys.ARROW_DOWN);
+        driver.findElement(selctAccData_Origin).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
-        origin.sendKeys("ROF");
+        driver.findElement(selctAccData_Origin).sendKeys("ROF");
         Thread.sleep(1000);
-        origin.sendKeys(Keys.ENTER);
-        actions.build().perform();
+        driver.findElement(selctAccData_Origin).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
     }
 
     @And("Lleno los datos de datos del certificado$")
     public void typeDataCertificate() throws Throwable {
-        Actions actions = new Actions(driver);
         /* Datos del certificado */
         /* Valor */
-        WebElement valor = driver.findElement(selctCertData_Value);
+        driver.findElement(selctCertData_Value).sendKeys("1,000.00");
         Thread.sleep(2000);
-        valor.sendKeys("1,000.00");
-        Thread.sleep(1000);
-        valor.sendKeys(Keys.ENTER);
+        driver.findElement(selctCertData_Value).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         /* Frecuencia */
-        WebElement frequency = driver.findElement(selctCertData_Frecuency);
-        frequency.sendKeys(Keys.ARROW_DOWN);
+        driver.findElement(selctCertData_Frecuency).sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
-        frequency.sendKeys("0");
+        driver.findElement(selctCertData_Frecuency).sendKeys("0");
         Thread.sleep(1000);
-        frequency.sendKeys(Keys.ENTER);
+        driver.findElement(selctCertData_Frecuency).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         /* Días Plazo */
-        WebElement daysTerm = driver.findElement(selctCertData_DaysTerm);
+        driver.findElement(selctCertData_DaysTerm).sendKeys("180");
         Thread.sleep(2000);
-        daysTerm.sendKeys("180");
-        daysTerm.sendKeys(Keys.ENTER);
+        driver.findElement(selctCertData_DaysTerm).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
         /* Capitalización de interés */
         WebElement capitalization = driver.findElement(btnCertData_CapitalizationInterest);
         ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", capitalization);
         Thread.sleep(2000);
         /* Taza de Interés */
-        WebElement interest = driver.findElement(btnCertData_Interest);
-        interest.click();
-        Thread.sleep(2000);
-        /* Cerrar diálogo */
-        WebElement dialog = driver.findElement(btnCertData_DialogClose);
+        driver.findElement(btnCertData_Interest).click();
         Thread.sleep(4000);
-        dialog.click();
-        /* Construcción */
-        actions.build().perform();
+        /* Cerrar diálogo */
+        driver.findElement(btnCertData_DialogClose).click();
         Thread.sleep(2000);
     }
 
     @And("Copio los datos ingresados en titulares en firmas autorizadas$")
     public void copyFirms() throws Throwable {
-        Actions actions = new Actions(driver);
         /* Datos del certificado */
         /* Firma1 */
-        WebElement firma1 = driver.findElement(btnFirms_FirmTd1);
-        firma1.click();
-        Thread.sleep(1000);
+        driver.findElement(btnFirms_FirmTd1).click();
+        Thread.sleep(2000);
         /* Firma2 */
-        WebElement firma2 = driver.findElement(btnFirms_FirmTd2);
-        firma2.click();
+        driver.findElement(btnFirms_FirmTd2).click();
+        Thread.sleep(2000);
         /* Caja Selección */
-        WebElement valor = driver.findElement(txtFirms_Firm);
-        valor.sendKeys(Keys.ARROW_RIGHT);
-        actions.build().perform();
+        driver.findElement(txtFirms_Firm).sendKeys(Keys.ARROW_RIGHT);
         Thread.sleep(2000);
     }
 
     @And("Genero el reporte$")
     public void generateReport() throws Throwable {
-        Actions actions = new Actions(driver);
         /* Generar reporte */
-        WebElement generate = driver.findElement(btnGenRep_Generar);
-        generate.click();
+        driver.findElement(btnGenRep_Generar).click();
+        /* Todas las ventanas abiertas en prueba*/
         Set <String> windows = driver.getWindowHandles();
+        /* Ventana principal */
         String mainWindow = driver.getWindowHandle();
         for (String handle: windows) {
             driver.switchTo().window(handle);
             String pagetitle = driver.getTitle();
             int cont = 1;
-            while (pagetitle.equals("") && cont < 40)  {
+            /* Control de la página de Error */
+            while (pagetitle.equals("") && cont < 60)  {
                 Thread.sleep(1000);
                 cont++;
                 pagetitle = driver.getTitle();
-            }
-            if (pagetitle.equals("")) {
-                pagetitle = "Error";
             }
             System.out.println("Página: " + pagetitle);
             if(pagetitle.equalsIgnoreCase("Error")) {
@@ -304,29 +292,28 @@ public class StepTransactions {
                 WebElement closeWindow = driver.findElement(closeWindowReport);
                 Thread.sleep(2000);
                 closeWindow.click();
+            } else if (pagetitle.equalsIgnoreCase("")) {
+                System.out.println("Time out, páginas no cargadas.");
             }
         }
         driver.switchTo().window(mainWindow);
-        actions.build().perform();
         Thread.sleep(2000);
     }
 
     @Then("Guardo el formulario$")
     public void saveForm()throws Throwable {
-        Actions actions = new Actions(driver);
         /* Barra de Tareas */
         /* Save */
-        WebElement save = driver.findElement(btnSave);
-        save.click();
-        actions.build().perform();
+        driver.findElement(btnSave).click();
         Thread.sleep(2000);
     }
 
-    @And("Y confirmo la creacion del numero de solicitud$")
+    @And("Confirmo la creacion del numero de solicitud$")
     public void checkNumberRequest() throws Throwable {
         String resultText = driver.findElement(messageStatus).getText();
         int cont = 1;
-        while (resultText.equals("PROCESANDO...") && cont <= 40) {
+        /* Control de carga al procesar la transacción con Datos Generales */
+        while (resultText.equals("PROCESANDO...") && cont <= 60) {
             Thread.sleep(1000);
             cont++;
             resultText = driver.findElement(messageStatus).getText();
@@ -334,13 +321,61 @@ public class StepTransactions {
         if (resultText.equals("PROCESANDO...")) {
             System.out.println("Time Out, Error al validar el formulario, " + resultText);
         } else {
-            Actions actions = new Actions(driver);
-            WebElement numberRequest = driver.findElement(txtNumberRequest);
-            numberRequest.sendKeys(Keys.ARROW_RIGHT);
+            driver.findElement(txtNumberRequest).sendKeys(Keys.ARROW_RIGHT);
             String messageNumberRequest = driver.findElement(txtNumberRequest).getAttribute("value");
             System.out.println("Número de Solicitud: " + messageNumberRequest);
-            actions.build().perform();
         }
+        Thread.sleep(2000);
+    }
+
+    @Then("Selecciono la opcion de detalle de la solicitud de fondos$")
+    public void selectDetailRequest() throws Throwable {
+        driver.findElement(btnDetReq_Main).click();
+        Thread.sleep(2000);
+    }
+
+    @And("LLeno el formulario de detalle de la solicitud de fondos$")
+    public void typeFormDetailRequest() throws Throwable {
+        /* ChecBox de Origen de los Fondos*/
+        WebElement selectSalary = driver.findElement(chkDetReq_Salary);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", selectSalary);
+        Thread.sleep(1000);
+        WebElement selectTransfers = driver.findElement(chkDetReq_Transfers);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", selectTransfers);
+        Thread.sleep(1000);
+        WebElement selectHerency = driver.findElement(chkDetReq_Herency);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", selectHerency);
+        Thread.sleep(2000);
+        /* Procedencia De Fondos Del Depósito Inicial */
+        driver.findElement(arrowModalDetReq_InitialDeposit).click();
+        Thread.sleep(2000);
+        driver.findElement(txtAreaDetReq_InitialDeposit).sendKeys("ARRENDAMIENTO DE BIENES");
+        Thread.sleep(2000);
+        driver.findElement(btnCloseDetReq_InitialDeposit).click();
+        Thread.sleep(2000);
+        /* Propósito de la Cuenta */
+        driver.findElement(selctDetReq_PurposeAccount).click();
+        Thread.sleep(1000);
+        driver.findElement(selctDetReq_PurposeAccount).sendKeys("ADQUIRIR BIENES A FUTURO");
+        Thread.sleep(2000);
+        driver.findElement(selctDetReq_PurposeAccount).sendKeys(Keys.ENTER);
+        Thread.sleep(2000);
+        /* Ocupación */
+        driver.findElement(arrowModalDetReq_Occupation).click();
+        Thread.sleep(2000);
+        driver.findElement(txtAreaDetReq_Comment).sendKeys("SOFTWARE DEVELOPER");
+        Thread.sleep(2000);
+        driver.findElement(btnCloseDetReq_Occupation).click();
+        Thread.sleep(2000);
+        /* Comentario */
+        driver.findElement(arrowModalDetReq_Comment).click();
+        Thread.sleep(2000);
+        driver.findElement(txtAreaDetReq_Occupation).sendKeys("TEST COMMENT");
+        Thread.sleep(2000);
+        driver.findElement(btnCloseDetReq_Comment).click();
+        Thread.sleep(2000);
+        WebElement selectYesOwner = driver.findElement(chkDetReq_YesOwner);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", selectYesOwner);
         Thread.sleep(2000);
     }
 
