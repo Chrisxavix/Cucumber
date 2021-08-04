@@ -43,7 +43,8 @@ public class StepTransactions {
     private By selctCertData_Frecuency = By.xpath("//*[@id='c_f7frecuencia_0']");
     private By selctCertData_DaysTerm = By.xpath("//*[@id='c_f7diasplazo_0']");
     private By btnCertData_Interest = By.xpath("//*[@id='c_F4Tasaboton_0']");
-    private By btnCertData_CapitalizationInterest = By.xpath("//*[@id='c_F9RenoInteres_0']");
+    private By btnCertData_AutomaticRenovation = By.xpath("//*[@id='container_5']/table/tbody/tr/td[3]/table/tbody/tr[1]/td[2]/span/input[2]");
+    private By btnCertData_CapitalizationInterest = By.xpath("//*[@id='container_5']/table/tbody/tr/td[3]/table/tbody/tr[2]/td[2]/span/input[2]");
     private By btnCertData_DialogClose = By.xpath("//*[@id='entorno-formulario']/div[2]/form/div[11]/div[1]/img");
     /* Firmas */
     private By btnFirms_FirmTd1 = By.xpath("//*[@id='c_Btncopiar_0']");
@@ -149,8 +150,8 @@ public class StepTransactions {
         }
     }
 
-    @When("Lleno los datos generales$")
-    public void typeGeneralData() throws Throwable {
+    @When("Lleno los datos generales y detallo el tipo de interes: \"([^\"]*)\" y/o \"([^\"]*)\"$")
+    public void typeGeneralData(boolean getAutomaticRenovation, boolean getCapitalizationInterest) throws Throwable {
         /* ---- DATOS GENERALES ---- */
         /* Titular y Cotitulares */
         /* Titutar */
@@ -232,8 +233,33 @@ public class StepTransactions {
         Thread.sleep(2500);
         driver.findElement(selctCertData_DaysTerm).sendKeys(Keys.ENTER);
         Thread.sleep(2000);
-        /* Capitalización de interés */
-        driver.findElement(btnCertData_CapitalizationInterest).click();
+        /* Para Testing con el check en false */
+        /*driver.findElement(btnCertData_AutomaticRenovation).click();
+        Thread.sleep(4000);*/
+        /* Checks de interés */
+        WebElement automaticRenovation = driver.findElement(btnCertData_AutomaticRenovation);
+        if(automaticRenovation.isSelected() && getAutomaticRenovation && getCapitalizationInterest) {
+            driver.findElement(btnCertData_CapitalizationInterest).click();
+            System.out.println("Check Interés: Ambos en true");
+        }  else if (!automaticRenovation.isSelected() && getAutomaticRenovation && getCapitalizationInterest) {
+            driver.findElement(btnCertData_AutomaticRenovation).click();
+            driver.findElement(btnCertData_CapitalizationInterest).click();
+            System.out.println("Check Interés: Estaba desactivado el automático, ahora ambos en true");
+        } else if (!automaticRenovation.isSelected() && getAutomaticRenovation && !getCapitalizationInterest) {
+            driver.findElement(btnCertData_AutomaticRenovation).click();
+            System.out.println("Check Interés: Estaba desactivado el automático, activado");
+        } else if (automaticRenovation.isSelected() && !getAutomaticRenovation && !getCapitalizationInterest) {
+            driver.findElement(btnCertData_AutomaticRenovation).click();
+            System.out.println("Check Interés: Ambos en falso");
+        } else if (!automaticRenovation.isSelected() && !getAutomaticRenovation && getCapitalizationInterest) {
+            System.out.println("Check default desactivado");
+            System.out.println("Check Interés: Error en interés, no se puede activar Capitalización teniendo desactivado Renovación Automática");
+        } else if (automaticRenovation.isSelected() && !getAutomaticRenovation && getCapitalizationInterest) {
+            System.out.println("Check default activado");
+            System.out.println("Check Interés: Error en interés, no se puede activar Capitalización teniendo desactivado Renovación Automática");
+        } else {
+            System.out.println("Check Interés: Default");
+        }
         Thread.sleep(2000);
         /* Taza de Interés */
         driver.findElement(btnCertData_Interest).click();
@@ -241,7 +267,7 @@ public class StepTransactions {
         /* Cerrar diálogo */
         driver.findElement(btnCertData_DialogClose).click();
         Thread.sleep(2000);
-        /* ---- DATOS DEL CERTIFICADO ---- */
+        /* ---- FIRMAS AUTORIZADAS DEL DEPOSITO ---- */
         /* Firma1 */
         driver.findElement(btnFirms_FirmTd1).click();
         Thread.sleep(2000);
@@ -323,9 +349,9 @@ public class StepTransactions {
         Thread.sleep(2000);
         /* ChecBox de Origen de los Fondos*/
         driver.findElement(chkDetReq_Salary).click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         driver.findElement(chkDetReq_Transfers).click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         driver.findElement(chkDetReq_Herency).click();
         Thread.sleep(2000);
         /* Procedencia De Fondos Del Depósito Inicial */
