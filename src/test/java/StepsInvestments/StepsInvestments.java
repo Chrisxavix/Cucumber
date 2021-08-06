@@ -7,6 +7,7 @@ import cucumber.api.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class StepsInvestments {
@@ -73,12 +74,29 @@ public class StepsInvestments {
     private By btnFodDebAcc_Td1Arrow = By.xpath("//*[@id='container_4']/div/table/tbody/tr[1]/td[4]/img");
     private By txtFodDebAcc_Td1Account = By.xpath("//*[@id='container_4']/div/table/tbody/tr[1]/td[4]/input");
     private By txtFodDebAcc_Td1Value = By.xpath("//*[@id='container_4']/div/table/tbody/tr[1]/td[5]/input");
-
+    private By txtFodChkCash_Cash = By.xpath("//*[@id='container_5']/table/tbody/tr[1]/td[2]/input[1]");
+    private By txtFodChkCash_Check = By.xpath("//*[@id='container_5']/table/tbody/tr[2]/td[2]/input[1]");
+    /* PAGOS */
+    private By btnPayt_Main = By.xpath("//*[@id='container_0']/table/tbody/tr/td/ul[1]/li[4]/a");
+    /* TABLA DE PAGOS */
+    private By btnTablePayt_Main = By.xpath("//*[@id='container_0']/table/tbody/tr/td/ul[1]/li[5]/a");
+    /* IMPRESION DE DOCUMENTOS */
+    private By btnPrtDoc_Main = By.xpath("//*[@id='container_0']/table/tbody/tr/td/ul[1]/li[6]/a");
+    private By txtPrtDoc_C1F1 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[1]/td[1]/input");
+    private By txtPrtDoc_C1F2 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[2]/td[1]/input");
+    private By txtPrtDoc_C1F3 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[3]/td[1]/input");
+    private By txtPrtDoc_C1F4 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[4]/td[1]/input");
+    private By btnPrtDoc_C3F1 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[1]/td[3]/button");
+    private By btnPrtDoc_C3F2 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[2]/td[3]/button");
+    private By btnPrtDoc_C3F3 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[3]/td[3]/button");
+    private By btnPrtDoc_C3F4 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[4]/td[3]/button");
     /* Opciones de tareas */
     private By btnSave = By.xpath("//*[@id='entorno-teclas']/button[9]");
     /* Generar reporte */
     private By viewStratrace = By.xpath("/html/body/a");
     private By closeWindowReport = By.xpath("/html/body/button[1]");
+    /* Times */
+    int timeOption1 = 1500;
 
     @Given("Abre el web browser Chrome y direcciona a la aplicacion$")
     public void openBrowser() throws Throwable {
@@ -88,43 +106,44 @@ public class StepsInvestments {
         driver.get("http://10.1.115.64:8380/WEB3/ingreso.html");
     }
 
-    @When("Cierro de sesiones activas e engreso el usuario UE0100066B y la contrasena chris012345$")
-    public void closeSessionAndTypeUserPassword()throws Throwable {
+    @When("Cierro sesiones activas e ingreso el usuario UE0100066B y la contrasena chris012345$")
+    public void closeSessionAndTypeUserPassword() throws Throwable {
         /* Forzar cierre de sesiones */
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(linkMoreOptions).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(btnForceClose).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Ingreso de usuario y contraseña */
         driver.findElement(txtUser).sendKeys("UE0100066B");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(txtPassword).sendKeys("chris012345");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(btnSubmit).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
     }
 
     @Then("Visualizo el menu principal$")
-    public void viewForm()throws Throwable {
+    public void viewMainForm() throws Throwable {
         String resultText = driver.findElement(messageStatus).getText();
         if (resultText.equalsIgnoreCase("OK")) {
-            System.out.println("Éxito al cargar el menú principal, " + resultText);
+            System.out.println("EXITO, USUARIO LOGUEDO, " + resultText);
         } else {
-            System.out.println("Error al cargar el menú principal, " + resultText);
+            System.out.println("ERROR AL LOGUEAR EL USUARIO, " + resultText);
+            driver.close();
         }
     }
 
     @When("Ingreso la transaccion 05-2000$")
     public void typeTransaction() throws Throwable {
         driver.findElement(txtCode).sendKeys("05-2000");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(txtCode).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
     }
 
     @Then("Visualizo el estado de la transaccion$")
-    public void viewStatusForm()throws Throwable {
+    public void viewStatusForm() throws Throwable {
         int cont = 1;
         String resultText = driver.findElement(messageStatus).getText();
         while (resultText.equalsIgnoreCase("CARGANDO FORMULARIO...") && cont <= 10) {
@@ -133,15 +152,15 @@ public class StepsInvestments {
             resultText = driver.findElement(messageStatus).getText();
         }
         if (resultText.equalsIgnoreCase("CARGANDO FORMULARIO...")) {
-            System.out.println("Time Out, Error al cargar el formulario, " + resultText);
+            System.out.println("TIME OUT, ERROR AL CARGAR EL FORMULARIO, " + resultText);
         } else {
-            String [] vect = resultText.split(" ");
+            String[] vect = resultText.split(" ");
             if (vect[0].equalsIgnoreCase("NO")) {
                 /* Mensaje de que no Existe el Formulario 0000 */
-                System.out.println("Error, " + resultText);
-            } else if (vect[1].equalsIgnoreCase("CARGADO")) {
+                System.out.println("ERROR, " + resultText);
+            } else if (vect[1].equalsIgnoreCase("CARGADO") || vect[2].equalsIgnoreCase("CORRECTAMENTE")) {
                 /* Mensaje de éxito de carga de Formulario 0000 */
-                System.out.println("Éxito, " + resultText);
+                System.out.println("EXITO, " + resultText);
             } else {
                 /* Diferentes errores de validación */
                 System.out.println(resultText);
@@ -157,44 +176,44 @@ public class StepsInvestments {
         /* TD1 */
         /* Identificación */
         driver.findElement(selctTitCotiTd1_Identificacion).sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd1_Identificacion).sendKeys("1704556644");
-        Thread.sleep(1000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd1_Identificacion).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Dirección */
         driver.findElement(selctTitCotiTd1_Direccion).sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd1_Direccion).sendKeys("1");
-        Thread.sleep(1000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd1_Direccion).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Cotitutar */
         /* TD2 */
         /* Y/O */
         driver.findElement(selctTitCotiTd2_YO).sendKeys("Y");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Identificación */
         driver.findElement(selctTitCotiTd2_Identificacion).sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd2_Identificacion).sendKeys("1100039401");
-        Thread.sleep(1000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd2_Identificacion).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Relación */
         driver.findElement(selctTitCotiTd2_Relacion).sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd2_Relacion).sendKeys("CTI");
-        Thread.sleep(1000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd2_Relacion).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Dirección */
         driver.findElement(selctTitCotiTd2_Direccion).sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd2_Direccion).sendKeys("4");
-        Thread.sleep(1000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctTitCotiTd2_Direccion).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* ---- DATOS DE LA CUENTA ---- */
         /* Ejecutivo */
         String executiveGetValue = driver.findElement(txtAccData_Executive).getAttribute("value");
@@ -202,65 +221,65 @@ public class StepsInvestments {
             driver.findElement(selctAccData_Executive).sendKeys(Keys.BACK_SPACE);
         }
         driver.findElement(selctAccData_Executive).sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctAccData_Executive).sendKeys("BA01000815");
-        Thread.sleep(1000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctAccData_Executive).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Origen */
         driver.findElement(selctAccData_Origin).sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctAccData_Origin).sendKeys("ROF");
-        Thread.sleep(1000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctAccData_Origin).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* ---- DATOS DEL CERTIFICADO ---- */
         /* Valor */
         driver.findElement(selctCertData_Value).sendKeys("1,000.00");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctCertData_Value).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Frecuencia */
         driver.findElement(arrowSelctCertData_Frecuency).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctCertData_Frecuency).sendKeys("0");
-        Thread.sleep(1000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctCertData_Frecuency).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Días Plazo */
         driver.findElement(selctCertData_DaysTerm).sendKeys("180");
-        Thread.sleep(2500);
+        Thread.sleep(timeOption1);
         driver.findElement(selctCertData_DaysTerm).sendKeys(Keys.ENTER);
-        /* Para Testing con el check en intereses se activa */
+        /* Para Testing con el check en intereses se desactive */
         /*driver.findElement(btnCertData_AutomaticRenovation).click();
-        Thread.sleep(2000);*/
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);*/
+        Thread.sleep(timeOption1);
     }
 
-    @And("Detallo renovacion automatica en true y capitalizacion de intereses en true$")
+    @And("Selecciono la renovacion automatica en true y capitalizacion de intereses en true$")
     public void typeCheckInteres1() throws Throwable {
         WebElement automaticRenovation = driver.findElement(btnCertData_AutomaticRenovation);
         if (automaticRenovation.isSelected()) {
             driver.findElement(btnCertData_CapitalizationInterest).click();
-            System.out.println("Check Interés: Ambos en true");
+            System.out.println("CHECK INTERES: AMBOS EN TRUE");
         } else {
             driver.findElement(btnCertData_AutomaticRenovation).click();
             driver.findElement(btnCertData_CapitalizationInterest).click();
-            System.out.println("Check Interés: Estaba desactivado el automático, ahora ambos en true");
+            System.out.println("CHECK INTERES: ESTABA DESACTIVADO EL AUTOMATICO, AHORA AMBOS EN TRUE");
         }
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
     }
 
-    @And("Detallo renovacion automatica en true y capitalizacion de intereses en false$")
+    @And("Selecciono la renovacion automatica en true y capitalizacion de intereses en false$")
     public void typeCheckInteres2() throws Throwable {
         WebElement automaticRenovation = driver.findElement(btnCertData_AutomaticRenovation);
-        if(!automaticRenovation.isSelected()) {
+        if (!automaticRenovation.isSelected()) {
             driver.findElement(btnCertData_AutomaticRenovation).click();
-            System.out.println("Check Interés: Estaba desactivado el automático, ahora es true y false");
+            System.out.println("CHECK INTERES: ESTABA DESACTIVADO EL AUTOMATICO, AHORA ES TRUE Y FALSE");
         } else {
-            System.out.println("Check Interés: Default");
+            System.out.println("CHECK INTERES: DEFAULT");
         }
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
     }
 
     @And("Lleno el item de datos generales: datos del certificado y firmas$")
@@ -270,181 +289,191 @@ public class StepsInvestments {
         Thread.sleep(4000);
         /* Cerrar diálogo */
         driver.findElement(btnCertData_DialogClose).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* ---- FIRMAS AUTORIZADAS DEL DEPOSITO ---- */
         /* Firma1 */
         driver.findElement(btnFirms_FirmTd1).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Firma2 */
         driver.findElement(btnFirms_FirmTd2).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Caja Selección */
         driver.findElement(txtFirms_Firm).sendKeys(Keys.ARROW_RIGHT);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
     }
 
     @And("Genero el reporte$")
     public void generateReport() throws Throwable {
         /* Generar reporte */
         driver.findElement(btnGenRep_Generar).click();
-        /* Todas las ventanas abiertas en prueba*/
-        Set<String> windows = driver.getWindowHandles();
-        /* Ventana principal */
-        String mainWindow = driver.getWindowHandle();
-        for (String handle: windows) {
-            driver.switchTo().window(handle);
-            String pagetitle = driver.getTitle();
-            int cont = 1;
-            /* Control de la página de Error */
-            while (pagetitle.equals("") && cont <= 120)  {
-                Thread.sleep(1000);
-                cont++;
-                pagetitle = driver.getTitle();
-            }
-            System.out.println("Página: " + pagetitle);
-            if(pagetitle.equalsIgnoreCase("Error")) {
-                Thread.sleep(1000);
-                driver.findElement(viewStratrace).click();
-                Thread.sleep(2000);
-                WebElement closeWindow = driver.findElement(closeWindowReport);
-                Thread.sleep(2000);
-                closeWindow.click();
-            } else if (pagetitle.equalsIgnoreCase("")) {
-                System.out.println("Time out, páginas no cargadas.");
-            }
-        }
-        driver.switchTo().window(mainWindow);
-        Thread.sleep(2000);
+        this.switchPages();
     }
 
-    @Then("Guardo el formulario$")
-    public void saveForm()throws Throwable {
+    @And("Guardo el formulario$")
+    public void saveForm() throws Throwable {
         /* Barra de Tareas */
-        /* Save */
+        /* Save Form */
         driver.findElement(btnSave).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
     }
 
-    @And("Confirmo la creacion del numero de solicitud$")
-    public void checkNumberRequest() throws Throwable {
+    @Then("Valido el formulario$")
+    public void validateForm() throws Throwable {
+        /* Caja de Transacción */
+        String txtTransaction = driver.findElement(txtCode).getAttribute("value");
         String resultText = driver.findElement(messageStatus).getText();
         int cont = 1;
-        /* Control de carga al procesar la transacción con Datos Generales */
+        /* Control de carga al procesar la transacción con dos minutos */
         while (resultText.equalsIgnoreCase("PROCESANDO...") && cont <= 120) {
             Thread.sleep(1000);
             cont++;
             resultText = driver.findElement(messageStatus).getText();
         }
         if (resultText.equalsIgnoreCase("PROCESANDO...")) {
-            System.out.println("Time Out, Error al validar el formulario, " + resultText);
-        } else if (resultText.equalsIgnoreCase("TRANSACCION REALIZADA CORRECTAMENTE")) {
+            System.out.println("TIME OUT, ERROR AL VALIDAR EL FORMULARIO, " + resultText);
+        } else if (resultText.equalsIgnoreCase("TRANSACCION REALIZADA CORRECTAMENTE") && txtTransaction.equals("05-2000")) {
             driver.findElement(txtNumberRequest).sendKeys(Keys.ARROW_RIGHT);
             String messageNumberRequest = driver.findElement(txtNumberRequest).getAttribute("value");
-            System.out.println("Número de Solicitud: " + messageNumberRequest);
+            System.out.println("EXITO, TRANSACCION " + txtTransaction + ", DATOS GENERALES, NUMERO DE SOLICITUD: " + messageNumberRequest);
+        } else if (resultText.equalsIgnoreCase("TRANSACCION REALIZADA CORRECTAMENTE") && txtTransaction.equals("05-2004")) {
+            System.out.println("EXITO, TRANSACCION " + txtTransaction + ", DETALLE SOCICITUD DE FONDOS");
+        } else if (resultText.equalsIgnoreCase("TRANSACCION REALIZADA CORRECTAMENTE") && txtTransaction.equals("05-2002")) {
+            System.out.println("EXITO, TRANSACCION " + txtTransaction + ", DETALLE INGRESO DE FONDOS");
+        } else if (resultText.equalsIgnoreCase("TRANSACCION REALIZADA CORRECTAMENTE") && txtTransaction.equals("05-4012")) {
+            System.out.println("EXITO, TRANSACCION " + txtTransaction + ", TABLA DE PAGOS");
+        } else if (resultText.equalsIgnoreCase("TRANSACCION REALIZADA CORRECTAMENTE") && txtTransaction.equals("05-2003")) {
+            System.out.println("EXITO, TRANSACCION " + txtTransaction + ", PAGOS");
+        } else if (resultText.equalsIgnoreCase("OK") && txtTransaction.equals("05-3064")) {
+            System.out.println("EXITO, TRANSACCION " + txtTransaction + ", IMPRESION DE DOCUMENTOS");
         } else {
             System.out.println(resultText);
         }
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
     }
 
     @When("LLeno el formulario de detalle de la solicitud de fondos$")
     public void typeFormDetailRequest() throws Throwable {
         driver.findElement(btnDetReq_Main).click();
-        Thread.sleep(2000);
-        /* ChecBox de Origen de los Fondos*/
+        Thread.sleep(3000);
+        /* ChecBox de Origen de los Fondos */
         driver.findElement(chkDetReq_Salary).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(chkDetReq_Transfers).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(chkDetReq_Herency).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Procedencia De Fondos Del Depósito Inicial */
         driver.findElement(arrowModalDetReq_InitialDeposit).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(txtAreaDetReq_InitialDeposit).sendKeys("ARRENDAMIENTO DE BIENES");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(btnCloseDetReq_InitialDeposit).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Propósito de la Cuenta */
         driver.findElement(selctDetReq_PurposeAccount).click();
         Thread.sleep(1000);
         driver.findElement(selctDetReq_PurposeAccount).sendKeys("ADQUIRIR BIENES A FUTURO");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(selctDetReq_PurposeAccount).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Ocupación */
         driver.findElement(arrowModalDetReq_Occupation).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(txtAreaDetReq_Comment).sendKeys("SOFTWARE DEVELOPER");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(btnCloseDetReq_Occupation).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         /* Comentario */
         driver.findElement(arrowModalDetReq_Comment).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(txtAreaDetReq_Occupation).sendKeys("TEST COMMENT");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(btnCloseDetReq_Comment).click();
-        Thread.sleep(2000);
-        WebElement selectYesOwner = driver.findElement(chkDetReq_YesOwner);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].checked = true;", selectYesOwner);
-        Thread.sleep(2000);
-    }
-
-    @And("Valido el formulario de detalle de la solicitud de fondos$")
-    public void validateDetailRequest() throws Throwable {
-        String resultText = driver.findElement(messageStatus).getText();
-        int cont = 1;
-        /* Control de carga al procesar la transacción con Datos Generales */
-        while (resultText.equalsIgnoreCase("PROCESANDO...") && cont <= 120) {
-            Thread.sleep(1000);
-            cont++;
-            resultText = driver.findElement(messageStatus).getText();
-        }
-        if (resultText.equalsIgnoreCase("PROCESANDO...")) {
-            System.out.println("Time Out, Error al validar el formulario, " + resultText);
-        } else if (resultText.equalsIgnoreCase("TRANSACCION REALIZADA CORRECTAMENTE")){
-            System.out.println("Éxito, detalle de solicitud: " +  resultText);
-        } else {
-            System.out.println(resultText);
-        }
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
+        driver.findElement(chkDetReq_YesOwner).click();
+        Thread.sleep(timeOption1);
     }
 
     @When("LLeno el formulario de detalle de ingreso de fondos$")
     public void typeGetFounds() throws Throwable {
         driver.findElement(btnFod_Main).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(btnFodDebAcc_Td1Arrow).click();
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
         driver.findElement(txtFodDebAcc_Td1Account).sendKeys("1100237829");
         Thread.sleep(1000);
         driver.findElement(txtFodDebAcc_Td1Account).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
-        driver.findElement(txtFodDebAcc_Td1Value).sendKeys("1000");
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
+        driver.findElement(txtFodDebAcc_Td1Value).sendKeys("500");
+        Thread.sleep(timeOption1);
         driver.findElement(txtFodDebAcc_Td1Value).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(timeOption1);
+        driver.findElement(txtFodChkCash_Cash).sendKeys("250");
+        Thread.sleep(timeOption1);
+        driver.findElement(txtFodDebAcc_Td1Value).sendKeys(Keys.ENTER);
+        Thread.sleep(timeOption1);
+        driver.findElement(txtFodChkCash_Check).sendKeys("250");
+        Thread.sleep(timeOption1);
+        driver.findElement(txtFodDebAcc_Td1Value).sendKeys(Keys.ENTER);
+        Thread.sleep(timeOption1);
     }
 
-    @And("Valido el formulario de detalle de ingreso de fondos$")
-    public void typeFounds() throws Throwable {
-        String resultText = driver.findElement(messageStatus).getText();
-        int cont = 1;
-        /* Control de carga al procesar la transacción con Datos Generales */
-        while (resultText.equalsIgnoreCase("PROCESANDO...") && cont <= 120) {
-            Thread.sleep(1000);
-            cont++;
-            resultText = driver.findElement(messageStatus).getText();
+    @When("Lleno el formulario de pagos$")
+    public void typePayments() throws Throwable {
+        driver.findElement(btnPayt_Main).click();
+        Thread.sleep(timeOption1);
+    }
+
+    @When("Selecciono y visualizo la tabla de pagos$")
+    public void viewPaymentTable() throws Throwable {
+        driver.findElement(btnTablePayt_Main).click();
+        Thread.sleep(timeOption1);
+    }
+
+    @When("Selecciono y visualizo la impresion de documentos$")
+    public void viewPrintDocuments() throws Throwable {
+        driver.findElement(btnPrtDoc_Main).click();
+        Thread.sleep(timeOption1);
+    }
+
+    @And("Imprimo los documentos$")
+    public void printDocuments() throws Throwable {
+        String printC1F1 = driver.findElement(txtPrtDoc_C1F1).getAttribute("value");
+        String printC1F2 = driver.findElement(txtPrtDoc_C1F2).getAttribute("value");
+        String printC1F3 = driver.findElement(txtPrtDoc_C1F3).getAttribute("value");
+        String printC1F4 = driver.findElement(txtPrtDoc_C1F4).getAttribute("value");
+        if (printC1F1.length() > 0) {
+            driver.findElement(btnPrtDoc_C3F1).click();
+            this.switchPages();
         }
-        if (resultText.equalsIgnoreCase("PROCESANDO...")) {
-            System.out.println("Time Out, Error al validar el formulario, " + resultText);
-        } else if (resultText.equalsIgnoreCase("TRANSACCION REALIZADA CORRECTAMENTE")){
-            System.out.println("Éxito, detalle de ingreso de fondos: " +  resultText);
-        } else {
-            System.out.println(resultText);
+        if (printC1F2.length() > 0) {
+            driver.findElement(btnPrtDoc_C3F2).click();
+            this.switchPages();
         }
-        Thread.sleep(2000);
+        if (printC1F3.length() > 0) {
+            driver.findElement(btnPrtDoc_C3F3).click();
+            this.switchPages();
+        }
+        if (printC1F4.length() > 0) {
+            driver.findElement(btnPrtDoc_C3F4).click();
+            this.switchPages();
+        }
+    }
+
+    @And("Abrir ventana nueva y redirigir a la transaccion 05-4000$")
+    public void openNewWindow() throws Throwable {
+        Thread.sleep(3000);
+        String mainWindow = driver.getWindowHandle();
+        /* Abre una pestaña */
+        ((JavascriptExecutor) driver).executeScript("window.open()");
+        ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        driver.get("http://10.1.115.64:8380/WEB3/entorno.html");
+        this.switchPages();
+        driver.findElement(txtCode).sendKeys("05-4000");
+        Thread.sleep(timeOption1);
+        driver.findElement(txtCode).sendKeys(Keys.ENTER);
+        Thread.sleep(timeOption1);
     }
 
     @And("Cierro el Browser$")
@@ -452,4 +481,44 @@ public class StepsInvestments {
         Thread.sleep(3000);
         /*driver.close();*/
     }
+
+    /* Cambio de páginas al generar reporte */
+    public void switchPages() {
+        try {
+            /* Todas las ventanas abiertas en prueba */
+            Set<String> windows = driver.getWindowHandles();
+            /* Ventana principal */
+            String mainWindow = driver.getWindowHandle();
+            for (String handle : windows) {
+                driver.switchTo().window(handle);
+                String pagetitle = driver.getTitle();
+                int cont = 1;
+                /* Control de la página de Error */
+                while (pagetitle.equals("") && cont <= 120) {
+                    Thread.sleep(1000);
+                    cont++;
+                    pagetitle = driver.getTitle();
+                }
+                /*System.out.println("Página: " + pagetitle);*/
+                if (pagetitle.equalsIgnoreCase("Error")) {
+                    Thread.sleep(1000);
+                    driver.findElement(viewStratrace).click();
+                    Thread.sleep(timeOption1);
+                    WebElement closeWindow = driver.findElement(closeWindowReport);
+                    Thread.sleep(timeOption1);
+                    closeWindow.click();
+                    driver.switchTo().window(mainWindow);
+                } else if (pagetitle.equalsIgnoreCase("Entorno FitBank")) {
+                    System.out.println("VENTANA NUEVA: ENTORNO FITBANK");
+                } else if (pagetitle.equalsIgnoreCase("")) {
+                    System.out.println("TIME OUT, PAGINAS NO CARGADAS");
+                    driver.switchTo().window(mainWindow);
+                }
+            }
+            Thread.sleep(timeOption1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
