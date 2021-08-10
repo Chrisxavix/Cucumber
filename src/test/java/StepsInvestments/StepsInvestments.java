@@ -144,7 +144,9 @@ public class StepsInvestments {
         String txtTransaction = driver.findElement(txtCode).getAttribute("value");
         String successTransaction = "TRANSACCION REALIZADA CORRECTAMENTE";
         while (resultStatus.equalsIgnoreCase("CARGANDO FORMULARIO...")
-               || resultStatus.equalsIgnoreCase("PROCESANDO...") && cont <= 10) {
+                || resultStatus.equalsIgnoreCase("PROCESANDO...")
+                || resultStatus.equalsIgnoreCase("POR FAVOR ESPERE A QUE EL PROCESO ACTUAL TERMINE.")
+                && cont <= 120) {
             Thread.sleep(1000);
             cont++;
             resultStatus = driver.findElement(messageStatus).getText();
@@ -176,9 +178,9 @@ public class StepsInvestments {
             System.out.println("EXITO. PAGINA: " + pageNavigateTitle.toUpperCase() + ". ESTADO: " + resultStatus);
         } else {
             System.out.println("ERROR. " + pageNavigateTitle.toUpperCase() + ". ESTADO: " + resultStatus);
-            driver.close();
+            /*driver.close();*/
         }
-        Thread.sleep(timeOption1);
+        Thread.sleep(2000);
     }
 
     @When("Ingreso la transaccion 05-2000$")
