@@ -10,7 +10,6 @@ import java.util.Set;
 import org.openqa.selenium.support.ui.*;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-
 public class StepsInvestmentsTime {
 
     private WebDriver driver;
@@ -66,7 +65,6 @@ public class StepsInvestmentsTime {
     /* DETALLE INGRESO DE FONDOS */
     private By btnFod_Main = By.xpath("//*[@id='container_0']/table/tbody/tr/td/ul[1]/li[3]/a");
     /* Débito de Cuentas */
-    private By btnFodDebAcc_Td1Arrow = By.xpath("//*[@id='container_4']/div/table/tbody/tr[1]/td[4]/img");
     private By txtFodDebAcc_Td1Account = By.xpath("//*[@id='container_4']/div/table/tbody/tr[1]/td[4]/input");
     private By txtFodDebAcc_Td1Value = By.xpath("//*[@id='container_4']/div/table/tbody/tr[1]/td[5]/input");
     private By txtFodChkCash_Cash = By.xpath("//*[@id='container_5']/table/tbody/tr[1]/td[2]/input[1]");
@@ -90,10 +88,7 @@ public class StepsInvestmentsTime {
     /* Generar reporte */
     private By viewStratrace = By.xpath("/html/body/a");
     private By closeWindowReport = By.xpath("/html/body/button[1]");
-    private By testNumber = By.xpath("//*[@id='container_3']/div/table/tbody/tr[2]/td[6]/input");
-    private By getDate = By.id("c_f7apertura_0");
-    private By editData = By.id("c_F3Cusrcta_0");
-    private By darUsuario = By.xpath("//*[@id='container_3']/div/table/tbody/tr[1]/td[5]/input");
+
     /* Times */
     int timeOption1 = 1500;
 
@@ -354,6 +349,67 @@ public class StepsInvestmentsTime {
         driver.findElement(chkDetReq_YesOwner).click();
     }
 
+    @When("Selecciono la pestana de pagos$")
+    public void selectPayment() throws Throwable {
+        driver.findElement(btnPayt_Main).click();
+    }
+
+    @When("Selecciono la pestana de detalle de ingreso de fondos$")
+    public void selectFormTypeFoundst() throws Throwable {
+        driver.findElement(btnFod_Main).click();
+    }
+
+    @And("Ingreso informacion en el formulario de detalle de ingreso de fondos$")
+    public void typeGetFounds() throws Throwable {
+        this.viewStatusTransaction();
+        WebElement td1Account =  driver.findElement(txtFodDebAcc_Td1Account);
+        td1Account.sendKeys("1100237829");
+        td1Account.sendKeys(Keys.ENTER);
+        WebElement td1Value = driver.findElement(txtFodDebAcc_Td1Value);
+        td1Value.sendKeys("500");
+        td1Value.sendKeys(Keys.ENTER);
+        WebElement cash = driver.findElement(txtFodChkCash_Cash);
+        cash.sendKeys("250");
+        cash.sendKeys(Keys.ENTER);
+        WebElement check = driver.findElement(txtFodChkCash_Check);
+        check.sendKeys("250");
+        check.sendKeys(Keys.ENTER);
+    }
+
+    @When("Selecciono la pestana de tabla de pagos$")
+    public void selectPaymentTable() throws Throwable {
+        driver.findElement(btnTablePayt_Main).click();
+    }
+
+    @When("Selecciono la pestana de impresion de documentos$")
+    public void viewPrintDocuments() throws Throwable {
+        driver.findElement(btnPrtDoc_Main).click();
+    }
+
+    @And("Imprimo los documentos$")
+    public void printDocuments() throws Throwable {
+        String printC1F1 = driver.findElement(txtPrtDoc_C1F1).getAttribute("value");
+        String printC1F2 = driver.findElement(txtPrtDoc_C1F2).getAttribute("value");
+        String printC1F3 = driver.findElement(txtPrtDoc_C1F3).getAttribute("value");
+        String printC1F4 = driver.findElement(txtPrtDoc_C1F4).getAttribute("value");
+        if (printC1F1.length() > 0) {
+            driver.findElement(btnPrtDoc_C3F1).click();
+            this.switchPages();
+        }
+        if (printC1F2.length() > 0) {
+            driver.findElement(btnPrtDoc_C3F2).click();
+            this.switchPages();
+        }
+        if (printC1F3.length() > 0) {
+            driver.findElement(btnPrtDoc_C3F3).click();
+            this.switchPages();
+        }
+        if (printC1F4.length() > 0) {
+            driver.findElement(btnPrtDoc_C3F4).click();
+            this.switchPages();
+        }
+    }
+
     /* Methods */
     /* Validaciones de tiempo con el status */
     public void waitPass() throws Throwable {
@@ -362,6 +418,7 @@ public class StepsInvestmentsTime {
         int cont = 1;
         while (status.equalsIgnoreCase("PROCESANDO...")
                 || status.equalsIgnoreCase("POR FAVOR ESPERE A QUE EL PROCESO ACTUAL TERMINE.")
+                || status.equalsIgnoreCase("CARGANDO FORMULARIO...")
                 && cont < 120) {
             cont++;
             Thread.sleep(100);
