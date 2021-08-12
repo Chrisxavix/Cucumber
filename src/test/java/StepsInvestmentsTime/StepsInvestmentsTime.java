@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import java.util.List;
 import java.util.Set;
 import org.openqa.selenium.support.ui.*;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -75,20 +76,16 @@ public class StepsInvestmentsTime {
     private By btnTablePayt_Main = By.xpath("//*[@id='container_0']/table/tbody/tr/td/ul[1]/li[5]/a");
     /* IMPRESION DE DOCUMENTOS */
     private By btnPrtDoc_Main = By.xpath("//*[@id='container_0']/table/tbody/tr/td/ul[1]/li[6]/a");
-    private By txtPrtDoc_C1F1 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[1]/td[1]/input");
-    private By txtPrtDoc_C1F2 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[2]/td[1]/input");
-    private By txtPrtDoc_C1F3 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[3]/td[1]/input");
-    private By txtPrtDoc_C1F4 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[4]/td[1]/input");
-    private By btnPrtDoc_C3F1 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[1]/td[3]/button");
-    private By btnPrtDoc_C3F2 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[2]/td[3]/button");
-    private By btnPrtDoc_C3F3 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[3]/td[3]/button");
-    private By btnPrtDoc_C3F4 = By.xpath("//*[@id='container_3']/div/table/tbody/tr[4]/td[3]/button");
+    private By tableSizePrtDoc = By.xpath("//*[@id='container_3']/div/table/tbody/tr");
+    private String txtPrtDoc_C1Part1 = "//*[@id='container_3']/div/table/tbody/tr[";
+    private String txtPrtDoc_C1Part2 = "]/td[1]/input";
+    private String txtPrtDoc_C3Part1 = "//*[@id='container_3']/div/table/tbody/tr[";
+    private String txtPrtDoc_C3Part2 = "]/td[3]/button";
     /* Opciones de tareas */
     private By btnSave = By.xpath("//*[@id='entorno-teclas']/button[9]");
     /* Generar reporte */
     private By viewStratrace = By.xpath("/html/body/a");
     private By closeWindowReport = By.xpath("/html/body/button[1]");
-
     /* Times */
     int timeOption1 = 1500;
 
@@ -388,25 +385,19 @@ public class StepsInvestmentsTime {
 
     @And("Imprimo los documentos$")
     public void printDocuments() throws Throwable {
-        String printC1F1 = driver.findElement(txtPrtDoc_C1F1).getAttribute("value");
-        String printC1F2 = driver.findElement(txtPrtDoc_C1F2).getAttribute("value");
-        String printC1F3 = driver.findElement(txtPrtDoc_C1F3).getAttribute("value");
-        String printC1F4 = driver.findElement(txtPrtDoc_C1F4).getAttribute("value");
-        if (printC1F1.length() > 0) {
-            driver.findElement(btnPrtDoc_C3F1).click();
-            this.switchPages();
-        }
-        if (printC1F2.length() > 0) {
-            driver.findElement(btnPrtDoc_C3F2).click();
-            this.switchPages();
-        }
-        if (printC1F3.length() > 0) {
-            driver.findElement(btnPrtDoc_C3F3).click();
-            this.switchPages();
-        }
-        if (printC1F4.length() > 0) {
-            driver.findElement(btnPrtDoc_C3F4).click();
-            this.switchPages();
+        List  col = driver.findElements(tableSizePrtDoc);
+        for(int i = 1; i <= col.size(); i++) {
+            String joinC1 = txtPrtDoc_C1Part1 + i + txtPrtDoc_C1Part2;
+            String joinC3 = txtPrtDoc_C3Part1 + i + txtPrtDoc_C3Part2;
+            WebElement column1 = driver.findElement(By.xpath(joinC1));
+            WebElement column2 = driver.findElement(By.xpath(joinC3));
+            String base = column1.getAttribute("value");
+            if (base.length() > 0 ) {
+                column2.click();
+                this.switchPages();
+            } else {
+                break;
+            }
         }
     }
 
