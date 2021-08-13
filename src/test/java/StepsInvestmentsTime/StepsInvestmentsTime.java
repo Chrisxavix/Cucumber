@@ -84,7 +84,7 @@ public class StepsInvestmentsTime {
     /* Opciones de tareas */
     private By btnSave = By.xpath("//*[@id='entorno-teclas']/button[9]");
     /* Generar reporte */
-    private By viewStratrace = By.xpath("/html/body/a");
+    private By viewStrace = By.xpath("/html/body/a");
     private By closeWindowReport = By.xpath("/html/body/button[1]");
     /* Times */
     int timeOption1 = 1500;
@@ -162,7 +162,7 @@ public class StepsInvestmentsTime {
         WebElement yo = driver.findElement(selctTitCotiTd2_YO);
         yo.sendKeys("Y");
         this.waitPass();
-        relation.sendKeys(Keys.ENTER);
+        yo.sendKeys(Keys.ENTER);
         /* Dirección */
         WebElement direction2 = driver.findElement(selctTitCotiTd2_Direccion);
         direction2.sendKeys("4");
@@ -244,14 +244,16 @@ public class StepsInvestmentsTime {
         driver.findElement(btnFirms_FirmTd1).click();
         /* Firma2 */
         driver.findElement(btnFirms_FirmTd2).click();
-        /* Caja Selección */
+        /* Caja del número de solicitud */
+        this.waitPass();
         driver.findElement(txtFirms_Firm).sendKeys(Keys.ARROW_RIGHT);
     }
 
     @And("Genero el reporte$")
     public void generateReport() throws Throwable {
         /* Generar reporte */
-        driver.findElement(btnGenRep_Generar).click();
+        WebElement generateReport =  driver.findElement(btnGenRep_Generar);
+        generateReport.click();
         this.switchPages();
     }
 
@@ -259,7 +261,8 @@ public class StepsInvestmentsTime {
     public void saveForm() throws Throwable {
         /* Barra de Tareas */
         /* Save Form */
-        driver.findElement(btnSave).click();
+        WebElement saveForm = driver.findElement(btnSave);
+        saveForm.click();
     }
 
     @And("Valido el estado de la transaccion$")
@@ -291,9 +294,9 @@ public class StepsInvestmentsTime {
             System.out.println("EXITO. TRANSACCION " + txtTransaction + ". DATOS GENERALES. NUMERO DE SOLICITUD: " + messageNumberRequest + ". ESTADO: " + resultStatus);
         } else if (resultStatus.equalsIgnoreCase(successTransaction) && txtTransaction.equals("05-2004")) {
             System.out.println("EXITO. TRANSACCION " + txtTransaction + ". DETALLE SOCICITUD DE FONDOS. ESTADO: " + resultStatus);
-        } else if (resultStatus.equalsIgnoreCase(successTransaction) && txtTransaction.equals("05-2002")) {
+        } else if (resultStatus.equalsIgnoreCase(successTransaction) || resultStatus.equalsIgnoreCase("OK") && txtTransaction.equals("05-2002")) {
             System.out.println("EXITO. TRANSACCION " + txtTransaction + ". DETALLE INGRESO DE FONDOS. ESTADO: " + resultStatus);
-        } else if (resultStatus.equalsIgnoreCase(successTransaction) && txtTransaction.equals("05-2003")) {
+        } else if (resultStatus.equalsIgnoreCase("FORMULARIO CARGADO CORRECTAMENTE") && txtTransaction.equals("05-2003")) {
             System.out.println("EXITO. TRANSACCION " + txtTransaction + ". PAGOS. ESTADO: " + resultStatus);
         } else if (resultStatus.equalsIgnoreCase(successTransaction) && txtTransaction.equals("05-4012")) {
             System.out.println("EXITO. TRANSACCION " + txtTransaction + ". TABLA DE PAGOS. ESTADO: " + resultStatus);
@@ -313,7 +316,9 @@ public class StepsInvestmentsTime {
 
     @When("Selecciono la pestana de detalle de la solicitud de fondos$")
     public void selectFormDetailRequest() throws Throwable {
-        driver.findElement(btnDetReq_Main).click();
+        WebElement btnDetailRequest = driver.findElement(btnDetReq_Main);
+        this.waitPass();
+        btnDetailRequest.click();
     }
 
     @And("Ingreso informacion en el formulario de detalle de la solicitud de fondos$")
@@ -331,34 +336,41 @@ public class StepsInvestmentsTime {
             transfer = driver.findElement(chkDetReq_Transfers);
             herency = driver.findElement(chkDetReq_Herency);
         }
-        driver.findElement(chkDetReq_Salary).click();
-        driver.findElement(chkDetReq_Transfers).click();
-        driver.findElement(chkDetReq_Herency).click();
-        this.waitPass();
-        driver.findElement(txtDetReq_Deposit).sendKeys("ARRENDAMIENTO DE BIENES");
+        salary.click();
+        transfer.click();
+        herency.click();
+        WebElement deposit = driver.findElement(txtDetReq_Deposit);
+        deposit.sendKeys("ARRENDAMIENTO DE BIENES");
         /* Propósito de la Cuenta */
         Select fruits = new Select(driver.findElement(selctDetReq_PurposeAccount));
         fruits.selectByVisibleText("ADQUIRIR BIENES A FUTURO");
         /* o usar: fruits.selectByIndex(2); */
-        driver.findElement(txtDetReq_Occupation).sendKeys("SOFTWARE DEVELOPER");
-        driver.findElement(txtDetReq_Comment).sendKeys("TEST COMMENT");
+        WebElement occupation = driver.findElement(txtDetReq_Occupation);
+        occupation.sendKeys("SOFTWARE DEVELOPER");
+        WebElement comment = driver.findElement(txtDetReq_Comment);
+        comment.sendKeys("TEST COMMENT");
         /* Dueño O Beneficiario */
-        driver.findElement(chkDetReq_YesOwner).click();
+        WebElement yesOwner = driver.findElement(chkDetReq_YesOwner);
+        yesOwner.click();
     }
 
     @When("Selecciono la pestana de pagos$")
     public void selectPayment() throws Throwable {
-        driver.findElement(btnPayt_Main).click();
+        WebElement btnPayment = driver.findElement(btnPayt_Main);
+        this.waitPass();
+        btnPayment.click();
     }
 
     @When("Selecciono la pestana de detalle de ingreso de fondos$")
     public void selectFormTypeFoundst() throws Throwable {
-        driver.findElement(btnFod_Main).click();
+        WebElement btnTypeFounds = driver.findElement(btnFod_Main);
+        this.waitPass();
+        btnTypeFounds.click();
     }
 
     @And("Ingreso informacion en el formulario de detalle de ingreso de fondos$")
     public void typeGetFounds() throws Throwable {
-        this.viewStatusTransaction();
+        this.waitPass();
         WebElement td1Account =  driver.findElement(txtFodDebAcc_Td1Account);
         td1Account.sendKeys("1100237829");
         td1Account.sendKeys(Keys.ENTER);
@@ -375,25 +387,29 @@ public class StepsInvestmentsTime {
 
     @When("Selecciono la pestana de tabla de pagos$")
     public void selectPaymentTable() throws Throwable {
-        driver.findElement(btnTablePayt_Main).click();
+        WebElement btnPayTable = driver.findElement(btnTablePayt_Main);
+        this.waitPass();
+        btnPayTable.click();
     }
 
     @When("Selecciono la pestana de impresion de documentos$")
     public void viewPrintDocuments() throws Throwable {
-        driver.findElement(btnPrtDoc_Main).click();
+        WebElement btnPrintDoc = driver.findElement(btnPrtDoc_Main);
+        this.waitPass();
+        btnPrintDoc.click();
     }
 
     @And("Imprimo los documentos$")
     public void printDocuments() throws Throwable {
-        List  col = driver.findElements(tableSizePrtDoc);
-        for(int i = 1; i <= col.size(); i++) {
+        List<WebElement> tablePrint = driver.findElements(tableSizePrtDoc);
+        for(int i = 1; i <= tablePrint.size(); i++) {
             String joinC1 = txtPrtDoc_C1Part1 + i + txtPrtDoc_C1Part2;
             String joinC3 = txtPrtDoc_C3Part1 + i + txtPrtDoc_C3Part2;
-            WebElement column1 = driver.findElement(By.xpath(joinC1));
-            WebElement column2 = driver.findElement(By.xpath(joinC3));
-            String base = column1.getAttribute("value");
+            WebElement column1Documents = driver.findElement(By.xpath(joinC1));
+            WebElement column3Print = driver.findElement(By.xpath(joinC3));
+            String base = column1Documents.getAttribute("value");
             if (base.length() > 0 ) {
-                column2.click();
+                column3Print.click();
                 this.switchPages();
             } else {
                 break;
@@ -412,7 +428,7 @@ public class StepsInvestmentsTime {
                 || status.equalsIgnoreCase("CARGANDO FORMULARIO...")
                 && cont < 120) {
             cont++;
-            Thread.sleep(100);
+            Thread.sleep(500);
             status = driver.findElement(messageStatus).getText();
             /*System.out.println("cont = " + cont);
             System.out.println("test = " + test);*/
@@ -439,7 +455,7 @@ public class StepsInvestmentsTime {
             /*System.out.println("Página: " + pagetitle);*/
             if (pagetitle.equalsIgnoreCase("Error")) {
                 Thread.sleep(1000);
-                driver.findElement(viewStratrace).click();
+                driver.findElement(viewStrace).click();
                 Thread.sleep(timeOption1);
                 driver.findElement(closeWindowReport).click();
                 driver.switchTo().window(mainWindow);
