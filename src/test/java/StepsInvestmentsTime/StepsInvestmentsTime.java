@@ -417,6 +417,11 @@ public class StepsInvestmentsTime {
         }
     }
 
+    @And("Cierro el navegador$")
+    public void closeBrowser() throws Throwable {
+        driver.quit();
+    }
+
     /* Methods */
     /* Validaciones de tiempo con el status */
     public void waitPass() throws Throwable {
