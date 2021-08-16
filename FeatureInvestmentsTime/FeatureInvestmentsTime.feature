@@ -24,6 +24,7 @@ Feature: Transacciones de Inversiones
     When Selecciono la pestana de impresion de documentos
     Then Valido el estado de la transaccion
     And Imprimo los documentos
+    And Cierro el navegador
 
   Scenario: Renovacion Automatica de Capital ativada y Capitalizacion de Intereses desactivada
     And Selecciono la renovacion automatica en true y capitalizacion de intereses en false en el item de datos generales
@@ -46,3 +47,4 @@ Feature: Transacciones de Inversiones
     When Selecciono la pestana de impresion de documentos
     Then Valido el estado de la transaccion
     And Imprimo los documentos
+    And Cierro el navegador
